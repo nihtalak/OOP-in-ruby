@@ -1,5 +1,3 @@
-require 'set'
-
 # TASK 1
 
 class BookOrder
@@ -49,11 +47,10 @@ class Library
   def peoples_count_ordered_one_popular_book(num)
     books = Hash.new(0)
     @orders.each { |order| books[order.book_name] += 1 }
-    books = books.sort_by(&:last).take(num).map &:first
-
-    readers = Set.new
+    books = books.sort_by(&:last).take(num).map(&:first)
+    readers = []
     @orders.each { |order| readers << order.name if books.include? order.book_name }
-    readers.size
+    readers.uniq.size
   end
 
   def add(book_record)
