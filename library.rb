@@ -21,14 +21,8 @@ class Library
 
   # the smallest period for which library found a book
   def min_delay
-    if @orders.empty?
-      return "No orders"
-    elsif @orders.size == 1
-      delay =  @orders.first.delay
-    else
-      delay = @orders.min { |a, b| a.delay <=> b.delay }.delay
-    end
-
+    order = @orders.min_by { |x| x.delay }
+    delay = order.nil? ? 0 : order.delay
     Time.at(delay).getgm.strftime("%H:%M:%S")
   end
 
@@ -55,8 +49,8 @@ class Library
   def peoples_count_ordered_one_popular_book(num)
     books = Hash.new(0)
     @orders.each { |order| books[order.book_name] += 1 }
-    books = books.sort { |a, b| b.last <=> a.last }.take(num).map &:first
-    # puts books
+    books = books.sort_by(&:last).take(num).map &:first
+
     readers = Set.new
     @orders.each { |order| readers << order.name if books.include? order.book_name }
     readers.size

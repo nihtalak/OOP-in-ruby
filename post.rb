@@ -28,7 +28,6 @@ class PostOffice
     @orders.select { |order| order.city == city }.size
   end
 
-  # TODO
   # how many parcels with value higher than 10 were sent 
   def value_fiter(value)
     @orders.select { |order| order.value > value }.size

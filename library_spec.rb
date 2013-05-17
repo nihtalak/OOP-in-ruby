@@ -8,8 +8,8 @@ describe Library do
     @lib = Library.new
   end
 
-  it "returns 'No orders' for getting min delay on no orders library" do
-    @lib.min_delay.should eq("No orders")
+  it "returns '00:00:00' for getting min delay on no orders library" do
+    @lib.min_delay.should eq("00:00:00")
   end
 
   it "returns 00:01:40 for getting min delay on one order library" do
