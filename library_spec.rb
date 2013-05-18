@@ -8,6 +8,7 @@ describe Library do
     @lib = Library.new
   end
 
+
   it "returns '00:00:00' for getting min delay on no orders library" do
     @lib.min_delay.should eq("00:00:00")
   end
@@ -31,9 +32,25 @@ describe Library do
     @lib.min_delay.should eq("00:01:00")
   end
 
+  it "should not raise exception when order_date is nil" do
+    5.times { @lib.add(BookOrder.new(BOOKS.first, READERS.last, nil, Time.now)) }
+
+    lambda { @lib.min_delay }.should_not raise_error(Exception)
+    @lib.min_delay.should eq("00:00:00")
+  end
+
+  it "should not raise exception when issue_date is nil" do
+    5.times { @lib.add(BookOrder.new(BOOKS.first, READERS.last, Time.now, nil)) }
+    
+    lambda { @lib.min_delay }.should_not raise_error(Exception)
+    @lib.min_delay.should eq("00:00:00")
+  end
+
   it "returns 2 for getting not satisfied orders" do
     5.times { @lib.add(BookOrder.new(BOOKS.first, READERS.last, Time.now)) }
     2.times { @lib.add(BookOrder.new(BOOKS.first, READERS.last)) }
+
+    @lib.not_satisfied.should eq(2)
   end
 
   it "returns #{READERS.first} for getting who often takes the #{BOOKS.first} book" do

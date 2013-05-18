@@ -8,7 +8,9 @@ class BookOrder
   end
 
   def delay
-    @issue_date ? @issue_date - @order_date : nil 
+    # returns nil if issue_date or order_date is nil
+    # otherwise returns issue_date - order_date
+    @issue_date and @order_date and @issue_date - @order_date
   end
 end
 
@@ -19,8 +21,7 @@ class Library
 
   # the smallest period for which library found a book
   def min_delay
-    order = @orders.min_by { |x| x.delay }
-    delay = order.nil? ? 0 : order.delay
+    delay = @orders.map { |x| x.delay }.compact.min || 0
     Time.at(delay).getgm.strftime("%H:%M:%S")
   end
 
